@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo/newtask.dart';
-import 'package:todo/task.dart';
 import 'package:todo/tasklist.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'bloc/TaskBloc.dart';
+import 'bloc/TaskBlocDelegate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-
+  BlocSupervisor.delegate = TaskBlocDelegate();
   runApp(MyApp());
 }
 
@@ -14,58 +15,36 @@ class MyApp extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'To-Do',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return BlocProvider<TaskBloc>(
+          create: (context) => TaskBloc(),
+          child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'To-Do',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final List<Task> _userTask = [];
-  void _newTask(String txName, DateTime chosenDate) {
-    final newTx = Task(
-      date: chosenDate,
-      taskNAme: txName,
-      id: DateTime.now().toString(),
-    );
-
-    setState(() {
-      print(newTx.taskNAme);
-      print(newTx.date);
-      _userTask.add(newTx);
-      print(_userTask);
-    });
-  }
-
+class MyHomePage extends StatelessWidget {
+   
   void _addNewTask(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: NewTAsk(_newTask),
+          child: NewTAsk(),
           behavior: HitTestBehavior.opaque,
         );
       },
     );
   }
 
-  void _deleteTask(String id) {
-    setState(() {
-      _userTask.removeWhere((tx) => tx.id == id);
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           MediaQuery.of(context).padding.top) *
                       0.5,
                   width: MediaQuery.of(context).size.width * 0.95,
-                  child: TaskList(_userTask, _deleteTask)),
+                  child: TaskList(),),
             ),
           ],
         ),
@@ -127,4 +106,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+ 
 }
