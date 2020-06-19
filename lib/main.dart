@@ -7,7 +7,7 @@ import 'bloc/TaskBlocDelegate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  BlocSupervisor.delegate = TaskBlocDelegate();
+ // BlocSupervisor.delegate = TaskBlocDelegate();
   runApp(MyApp());
 }
 

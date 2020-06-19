@@ -23,6 +23,10 @@ class TaskBloc extends Bloc<ToDoEvent, List<Task>> {
         newState.removeWhere((tx) => tx.id == event.id);
         yield newState;
         break;
+      case EventType.show:
+        
+        yield event.taskList;
+        break;  
       default:
         throw Exception('Event not found $event');
     }
