@@ -1,10 +1,10 @@
 import '../task.dart';
 
-enum EventType { add, delete }
+enum EventType { add, delete ,show}
 
 class ToDoEvent {
   Task task;
-  String id;
+  int id;
   EventType eventType;
 
   ToDoEvent.add(Task task) {
@@ -12,8 +12,15 @@ class ToDoEvent {
     this.task = task;
   }
 
-  ToDoEvent.delete(String id) {
+  ToDoEvent.delete(int  id) {
     this.eventType = EventType.delete;
     this.id = id;
+  }
+  List<Task> taskList;
+  ToDoEvent.show( List<Task> tasks)
+  {
+     this.eventType = EventType.show;
+     this.taskList=tasks;
+
   }
 }

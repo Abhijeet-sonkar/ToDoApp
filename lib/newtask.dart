@@ -4,7 +4,7 @@ import 'event/todoEvent.dart';
 import 'bloc/TaskBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'task.dart';
-
+import 'database/database_provider.dart';
 class NewTAsk extends StatefulWidget {
 
 
@@ -23,14 +23,16 @@ class _NewTAskState extends State<NewTAsk> {
     if (enteredTitle.isEmpty || _selectedDate == null) {
       return;
     }
+        print("event1");
+        String formattedDate=_selectedDate.toString();
+    Task task=Task(date:formattedDate.substring(0,10) ,taskNAme: enteredTitle);
 
-    BlocProvider.of<TaskBloc>(context).add(
-      ToDoEvent.add(Task(
-          id: DateTime.now().toString(),
-          taskNAme: enteredTitle,
-          date: _selectedDate)),
-    );
+       DatabaseProvider.db.insert(task).then(
+                              (storedTask) =>  BlocProvider.of<TaskBloc>(context).add(
+      ToDoEvent.add(storedTask),
+    ));
     print(enteredTitle);
+    print("event2");
     Navigator.of(context).pop();
   }
 

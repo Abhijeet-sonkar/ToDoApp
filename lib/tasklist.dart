@@ -5,8 +5,25 @@ import 'package:todo/event/todoEvent.dart';
 import 'task.dart';
 import 'bloc/TaskBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'database/database_provider.dart';
 
-class TaskList extends StatelessWidget {
+class TaskList extends StatefulWidget {
+  @override
+  _TaskListState createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
+  @override
+  void initState() {
+    super.initState();
+     DatabaseProvider.db.getTask().then(
+      (foodList) {
+          print("initialising database");
+        BlocProvider.of<TaskBloc>(context).add(ToDoEvent.show(foodList));
+     
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TaskBloc, List<Task>>(
@@ -63,13 +80,15 @@ class TaskList extends StatelessWidget {
                         taskList[index].taskNAme,
                       ),
                       subtitle: Text(
-                          'Due date: ${DateFormat.yMMMd().format(taskList[index].date)}'),
+                          'Due date: ${taskList[index].date}'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         color: Colors.red,
-                        onPressed: () => BlocProvider.of<TaskBloc>(context).add(
+                        onPressed: () => 
+                        DatabaseProvider.db.delete(taskList[index].id).then((_) {
+                        BlocProvider.of<TaskBloc>(context).add(
                       ToDoEvent.delete(taskList[index].id),
-                      ),
+                      );})
                     ),
                   )
                   ),
