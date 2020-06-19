@@ -16,7 +16,7 @@ class _TaskListState extends State<TaskList> {
   @override
   void initState() {
     super.initState();
-     DatabaseProvider.db.getFoods().then(
+     DatabaseProvider.db.getTask().then(
       (foodList) {
           print("initialising database");
         BlocProvider.of<TaskBloc>(context).add(ToDoEvent.show(foodList));

@@ -48,21 +48,21 @@ class DatabaseProvider {
     );
   }
 
-  Future<List<Task>> getFoods() async {
+  Future<List<Task>> getTask() async {
     final db = await database;
     
-    var foods = await db
+    var tasks = await db
         .query(TABLE_TASK, columns: [COLUMN_ID, TASK_NAME, DATE]);
 
-    List<Task> foodList = List<Task>();
+    List<Task> taskList = List<Task>();
 
-    foods.forEach((currentFood) {
-      Task food = Task.fromMap(currentFood);
+    tasks.forEach((currentTask) {
+      Task task = Task.fromMap(currentTask);
 
-      foodList.add(food);
+      taskList.add(task);
     });
-    print("getfoods called");
-    return foodList;
+   
+    return taskList;
   }
 
   Future<Task> insert(Task task) async {
